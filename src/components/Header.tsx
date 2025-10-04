@@ -3,6 +3,8 @@ import { AppBar, Toolbar, Typography } from '@mui/material';
 import { theme } from '../theme';
 
 export default function Header() {
+  const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -10,7 +12,7 @@ export default function Header() {
         <Typography
           variant="h6"
           component="a"
-          href="/"
+          href={`${base}/`}
           className="text-decoration-none text-white"
         >
           Lisbon Recycling
