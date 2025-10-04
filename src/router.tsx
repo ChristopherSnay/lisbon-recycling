@@ -4,29 +4,24 @@ import RequireStreetGuard from './components/RequireStreetGuard';
 import MainPage from './pages/MainPage';
 import StreetPage from './pages/StreetPage';
 
-export const router = createBrowserRouter(
-  [
-    {
-      path: '/',
-      element: <App />,
-      children: [
-        {
-          index: true,
-          element: (
-            <RequireStreetGuard>
-              <MainPage />
-            </RequireStreetGuard>
-          )
-        },
-        {
-          path: 'street',
-          element: <StreetPage />
-        }
-        // other routes...
-      ]
-    }
-  ],
+export const router = createBrowserRouter([
   {
-    basename: '/lisbon-recycling'
+    path: '/',
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: (
+          <RequireStreetGuard>
+            <MainPage />
+          </RequireStreetGuard>
+        )
+      },
+      {
+        path: 'street',
+        element: <StreetPage />
+      }
+      // other routes...
+    ]
   }
-);
+]);
