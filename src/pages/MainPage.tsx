@@ -47,13 +47,32 @@ export default function MainPage() {
     }
   }, [street, days]);
 
-  const remainingDays = useMemo<number | undefined>(() => {
+  const remainingDays = useMemo<number | string | undefined>(() => {
     if (!street || !days || !nextPickup) {
       return undefined;
     }
 
-    return parseInt(getRemainingDays(nextPickup), 10);
+    const result = parseInt(getRemainingDays(nextPickup), 10);
+
+    if (result == 0) {
+      return 'Today';
+    } else if (result == 1) {
+      return 'Tomorrow';
+    } else {
+      return result;
+    }
   }, [street, days, nextPickup, getRemainingDays]);
+
+  const resultSize = useMemo<string>(() => {
+    switch (remainingDays) {
+      case 'Today':
+        return 'text--4';
+      case 'Tomorrow':
+        return 'text--4';
+      default:
+        return 'text--7';
+    }
+  }, [remainingDays]);
 
   return (
     <section className="py-5 mx-auto">
@@ -82,8 +101,10 @@ export default function MainPage() {
 
           {street && days && (
             <>
-              <span className="text--7 lh-1">{remainingDays ?? 'N/A'}</span>
-              <span className="fs-3 mt-2">Days Remaining</span>
+              <span className={resultSize}>{remainingDays}</span>
+              {remainingDays !== 'Today' && remainingDays !== 'Tomorrow' && (
+                <span className="fs-3 mt-2">Days Remaining</span>
+              )}
             </>
           )}
         </CardContent>
