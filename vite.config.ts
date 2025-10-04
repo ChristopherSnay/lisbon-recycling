@@ -2,7 +2,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [
     react(),
     viteStaticCopy({
@@ -18,5 +18,5 @@ export default defineConfig(({ mode }) => ({
       ]
     })
   ],
-  base: mode === 'development' ? '/' : '/lisbon-recycling'
+  base: '/lisbon-recycling'
 }));

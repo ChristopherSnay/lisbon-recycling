@@ -1,4 +1,13 @@
-import { Autocomplete, Box, TextField, Typography } from '@mui/material';
+import { LocationOn } from '@mui/icons-material';
+import {
+  Autocomplete,
+  Avatar,
+  Card,
+  CardContent,
+  CardHeader,
+  TextField,
+  Typography
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStreet } from '../context/StreetContext';
@@ -27,39 +36,54 @@ export default function StreetPage() {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
-      <Typography variant="h5" gutterBottom>
-        Select Your Street
-      </Typography>
-      {loading && <Typography>Loading streets...</Typography>}
-      {error && <Typography color="error">{error}</Typography>}
-      {!loading && !error && streets.length === 0 && (
-        <Typography color="warning.main">
-          No streets found. Check /streets.json and network tab.
-        </Typography>
-      )}
-
-      {!loading && !error && streets.length > 0 && (
-        <Autocomplete
-          options={streets}
-          getOptionLabel={(option) => option.name}
-          value={streets.find((s) => s.id === streetId) || null}
-          onChange={handleStreetChange}
-          inputValue={inputValue}
-          onInputChange={(_, newInputValue, reason) => {
-            if (reason === 'clear') {
-              setStreet(null);
-              setInputValue('');
-            } else {
-              setInputValue(newInputValue);
-            }
-          }}
-          renderInput={(params) => (
-            <TextField {...params} label="Street" variant="outlined" />
-          )}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
+    <section className="d-flex flex-column align-items-center py-5">
+      <Card elevation={5} className="w-fit" sx={{ width: '100%', maxWidth: 400 }}>
+        <CardHeader
+          title="Select Your Street"
+          sx={(bgColor) => ({
+            bgcolor: bgColor.palette.grey[900]
+          })}
+          avatar={
+            <Avatar sx={(bgColor) => ({ bgcolor: bgColor.palette.warning.light })}>
+              <LocationOn />
+            </Avatar>
+          }
         />
-      )}
-    </Box>
+        <CardContent>
+          {loading && <Typography>Loading streets...</Typography>}
+          {error && <Typography color="error">{error}</Typography>}
+          {!loading && !error && streets.length === 0 && (
+            <Typography color="warning.main">
+              No streets found. Check /streets.json and network tab.
+            </Typography>
+          )}
+
+          {!loading && !error && streets.length > 0 && (
+            <Autocomplete
+              size="medium"
+              fullWidth
+              options={streets}
+              getOptionLabel={(option) => option.name}
+              value={streets.find((s) => s.id === streetId) || null}
+              onChange={handleStreetChange}
+              inputValue={inputValue}
+              onInputChange={(_, newInputValue, reason) => {
+                if (reason === 'clear') {
+                  setStreet(null);
+                  setInputValue('');
+                } else {
+                  setInputValue(newInputValue);
+                }
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Street" variant="outlined" />
+              )}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              className="my-2"
+            />
+          )}
+        </CardContent>
+      </Card>
+    </section>
   );
 }
