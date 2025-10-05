@@ -12,18 +12,18 @@ import {
 } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStreet } from '../context/StreetContext';
+import { useSavedStreet } from '../context/StreetContext';
 import useDayCalculator from '../hooks/useDayCalculator';
 import useDays from '../hooks/useDays';
 import useStreets from '../hooks/useStreets';
 
 export default function MainPage() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { streetId } = useStreet();
+  const { savedStreetId } = useSavedStreet();
   const { streets } = useStreets();
   const { days } = useDays();
   const { getNextRecyclingDay, getRemainingDays } = useDayCalculator();
-  const street = streets.find((s) => s.id === streetId);
+  const street = streets.find((s) => s.id === savedStreetId);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 

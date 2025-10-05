@@ -10,30 +10,31 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStreet } from '../context/StreetContext';
+import { useSavedStreet } from '../context/StreetContext';
 import useStreets from '../hooks/useStreets';
 import type { Street } from '../models/Street';
+import { trackClarityEvent } from '../utils/ClarityUtil';
 
 export default function StreetPage() {
-  const { streetId, setStreet } = useStreet();
+  const { savedStreetId, setSavedStreetId } = useSavedStreet();
   const { streets, loading, error } = useStreets();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
 
-  // Sync inputValue with selected streetId
-  useEffect(() => {
-    const selectedStreet = streets.find((s) => s.id === streetId);
-    setInputValue(selectedStreet ? selectedStreet.name : '');
-  }, [streetId, streets]);
-
   const handleStreetChange = (_event: any, newValue: Street | null) => {
     if (newValue?.id !== null && newValue?.id !== undefined) {
-      setStreet(newValue.id);
+      setSavedStreetId(newValue.id);
+      trackClarityEvent('set', 'street', newValue.name);
       navigate('/');
     } else {
-      setStreet(null);
+      setSavedStreetId(null);
     }
   };
+
+  useEffect(() => {
+    const selectedStreet = streets.find((s) => s.id === savedStreetId);
+    setInputValue(selectedStreet ? selectedStreet.name : '');
+  }, [savedStreetId, streets]);
 
   return (
     <section className="d-flex flex-column align-items-center py-5">
@@ -64,12 +65,12 @@ export default function StreetPage() {
               fullWidth
               options={streets}
               getOptionLabel={(option) => option.name}
-              value={streets.find((s) => s.id === streetId) || null}
+              value={streets.find((s) => s.id === savedStreetId) || null}
               onChange={handleStreetChange}
               inputValue={inputValue}
               onInputChange={(_, newInputValue, reason) => {
                 if (reason === 'clear') {
-                  setStreet(null);
+                  setSavedStreetId(null);
                   setInputValue('');
                 } else {
                   setInputValue(newInputValue);

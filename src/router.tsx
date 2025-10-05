@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import RequireStreetGuard from './components/RequireStreetGuard';
 import MainPage from './pages/MainPage';
+import NotFoundPage from './pages/NotFoundPage';
 import StreetPage from './pages/StreetPage';
 
 export const router = createBrowserRouter([
@@ -20,6 +21,14 @@ export const router = createBrowserRouter([
       {
         path: 'street',
         element: <StreetPage />
+      },
+      {
+        path: 'choose-street',
+        element: <StreetPage />
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />
       }
       // other routes...
     ]

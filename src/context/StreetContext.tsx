@@ -1,38 +1,38 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 
-interface StreetContextType {
-  streetId: number | null;
-  setStreet: (streetId: number | null) => void;
+interface SavedStreetContextType {
+  savedStreetId: number | null;
+  setSavedStreetId: (streetId: number | null) => void;
 }
 
-const StreetContext = createContext<StreetContextType | undefined>(undefined);
+const SavedStreetContext = createContext<SavedStreetContextType | undefined>(undefined);
 
-export const useStreet = () => {
-  const context = useContext(StreetContext);
+export const useSavedStreet = () => {
+  const context = useContext(SavedStreetContext);
   if (!context) {
     throw new Error('useStreet must be used within a StreetProvider');
   }
   return context;
 };
 
-export const StreetProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedStreetId, setSelectedStreetId] = useState<number | null>(() => {
+export const SavedStreetProvider = ({ children }: { children: ReactNode }) => {
+  const [savedStreetId, setStreetId] = useState<number | null>(() => {
     const stored = localStorage.getItem('street');
     return stored !== null ? Number(stored) : null;
   });
 
-  const setStreet = (streetId: number | null): void => {
+  const setSavedStreetId = (streetId: number | null): void => {
     if (streetId === null) {
       localStorage.removeItem('street');
     } else {
-      setSelectedStreetId(streetId);
+      setStreetId(streetId);
       localStorage.setItem('street', streetId.toString());
     }
   };
 
   return (
-    <StreetContext.Provider value={{ streetId: selectedStreetId, setStreet }}>
+    <SavedStreetContext.Provider value={{ savedStreetId, setSavedStreetId }}>
       {children}
-    </StreetContext.Provider>
+    </SavedStreetContext.Provider>
   );
 };

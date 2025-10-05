@@ -3,19 +3,19 @@ import { CssBaseline } from '@mui/material';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
-import { StreetProvider } from './context/StreetContext.tsx';
+import { SavedStreetProvider } from './context/StreetContext.tsx';
 import './index.scss';
 import { router } from './router.tsx';
 import { theme } from './theme.ts';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <StreetProvider>
+    <SavedStreetProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
 
         <RouterProvider router={router} />
       </ThemeProvider>
-    </StreetProvider>
+    </SavedStreetProvider>
   </StrictMode>
 );
