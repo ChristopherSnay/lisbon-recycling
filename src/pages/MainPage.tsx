@@ -16,6 +16,7 @@ import { useSavedStreet } from '../context/StreetContext';
 import useDayCalculator from '../hooks/useDayCalculator';
 import useDays from '../hooks/useDays';
 import useStreets from '../hooks/useStreets';
+import { trackClarityEvent } from '../utils/ClarityUtil';
 
 export default function MainPage() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -28,10 +29,12 @@ export default function MainPage() {
   const navigate = useNavigate();
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>): void => {
+    trackClarityEvent('track', 'click', 'menu_open');
     setAnchorEl(event.currentTarget);
   };
 
   const handleStreetChange = (): void => {
+    trackClarityEvent('track', 'click', 'change_street');
     setAnchorEl(null);
     navigate('/street');
   };

@@ -1,9 +1,14 @@
 import RecyclingIcon from '@mui/icons-material/Recycling';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import { theme } from '../theme';
+import { trackClarityEvent } from '../utils/ClarityUtil';
 
 export default function Header() {
   const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
+
+  const handleBaseClick = () => {
+    trackClarityEvent('track', 'click', 'title');
+  }
 
   return (
     <AppBar position="static">
@@ -14,6 +19,7 @@ export default function Header() {
           component="a"
           href={`${base}/`}
           className="text-decoration-none text-white"
+          onClick={handleBaseClick}
         >
           Lisbon Recycling
         </Typography>

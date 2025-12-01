@@ -2,7 +2,9 @@ import { LocationOn } from '@mui/icons-material';
 import {
   Autocomplete,
   Avatar,
+  Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
   TextField,
@@ -24,12 +26,24 @@ export default function StreetPage() {
   const handleStreetChange = (_event: any, newValue: Street | null) => {
     if (newValue?.id !== null && newValue?.id !== undefined) {
       setSavedStreetId(newValue.id);
+      trackClarityEvent('track', 'click', 'select_street');
       trackClarityEvent('set', 'street', newValue.name);
-      navigate('/');
     } else {
       setSavedStreetId(null);
     }
   };
+
+  const handleSubmit = () => {
+    if (!savedStreetId) return;
+
+    const selectedStreet = streets.find((s) => s.id === savedStreetId);
+
+    if (!selectedStreet) return;
+
+    trackClarityEvent('track', 'click', 'submit');
+    trackClarityEvent('set', 'street', selectedStreet.name);
+    navigate('/');
+  }
 
   useEffect(() => {
     const selectedStreet = streets.find((s) => s.id === savedStreetId);
@@ -84,6 +98,9 @@ export default function StreetPage() {
             />
           )}
         </CardContent>
+        <CardActions className="justify-content-end">
+          <Button onClick={handleSubmit} disabled={!savedStreetId}>submit</Button>
+        </CardActions>
       </Card>
     </section>
   );

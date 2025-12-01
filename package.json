@@ -6,6 +6,7 @@
   "author": "Christopher Snay",
   "scripts": {
     "dev": "vite",
+    "start": "vite",
     "build": "tsc -b && vite build",
     "predeploy": "npm run build",
     "postbuild": "copy dist\\index.html dist\\404.html",
