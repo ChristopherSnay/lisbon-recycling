@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSavedStreet } from '../context/StreetContext';
 import useStreets from '../hooks/useStreets';
 import type { Street } from '../models/Street';
-import { trackClarityEvent } from '../utils/ClarityUtil';
+import { setClarityProperty, trackClarityEvent } from '../utils/ClarityUtil';
 
 export default function StreetPage() {
   const { savedStreetId, setSavedStreetId } = useSavedStreet();
@@ -26,8 +26,8 @@ export default function StreetPage() {
   const handleStreetChange = (_event: any, newValue: Street | null) => {
     if (newValue?.id !== null && newValue?.id !== undefined) {
       setSavedStreetId(newValue.id);
-      trackClarityEvent('track', 'click', 'select_street');
-      trackClarityEvent('set', 'street', newValue.name);
+      trackClarityEvent('click', { target: 'select_street' });
+      setClarityProperty('street', newValue.name);
     } else {
       setSavedStreetId(null);
     }
@@ -40,10 +40,10 @@ export default function StreetPage() {
 
     if (!selectedStreet) return;
 
-    trackClarityEvent('track', 'click', 'submit');
-    trackClarityEvent('set', 'street', selectedStreet.name);
+    trackClarityEvent('click', { target: 'submit' });
+    setClarityProperty('street', selectedStreet.name);
     navigate('/');
-  }
+  };
 
   useEffect(() => {
     const selectedStreet = streets.find((s) => s.id === savedStreetId);
@@ -99,7 +99,9 @@ export default function StreetPage() {
           )}
         </CardContent>
         <CardActions className="justify-content-end">
-          <Button onClick={handleSubmit} disabled={!savedStreetId}>submit</Button>
+          <Button onClick={handleSubmit} disabled={!savedStreetId}>
+            submit
+          </Button>
         </CardActions>
       </Card>
     </section>

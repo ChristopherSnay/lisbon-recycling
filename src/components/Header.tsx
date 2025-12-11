@@ -7,8 +7,8 @@ export default function Header() {
   const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
 
   const handleBaseClick = () => {
-    trackClarityEvent('track', 'click', 'title');
-  }
+    trackClarityEvent('click', { target: 'title' });
+  };
 
   return (
     <AppBar position="static">

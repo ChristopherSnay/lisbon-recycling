@@ -10,13 +10,13 @@ import {
   MenuItem,
   Typography
 } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSavedStreet } from '../context/StreetContext';
 import useDayCalculator from '../hooks/useDayCalculator';
 import useDays from '../hooks/useDays';
 import useStreets from '../hooks/useStreets';
-import { trackClarityEvent } from '../utils/ClarityUtil';
+import { setClarityProperty, trackClarityEvent } from '../utils/ClarityUtil';
 
 export default function MainPage() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -29,12 +29,12 @@ export default function MainPage() {
   const navigate = useNavigate();
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>): void => {
-    trackClarityEvent('track', 'click', 'menu_open');
+    trackClarityEvent('click', { target: 'menu_open' });
     setAnchorEl(event.currentTarget);
   };
 
   const handleStreetChange = (): void => {
-    trackClarityEvent('track', 'click', 'change_street');
+    trackClarityEvent('click', { target: 'change_street' });
     setAnchorEl(null);
     navigate('/street');
   };
@@ -76,6 +76,12 @@ export default function MainPage() {
         return 'text--7';
     }
   }, [remainingDays]);
+
+  useEffect(() => {
+    if (street?.name) {
+      setClarityProperty('street', street.name);
+    }
+  }, [street?.name]);
 
   return (
     <section className="py-5 mx-auto">
