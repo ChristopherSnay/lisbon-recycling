@@ -23,10 +23,10 @@ export default function MainPage() {
   const { savedStreetId } = useSavedStreet();
   const { streets } = useStreets();
   const { days } = useDays();
-  const { getNextRecyclingDay, getRemainingDays } = useDayCalculator();
   const street = streets.find((s) => s.id === savedStreetId);
   const menuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { remainingDays, nextPickup } = useDayCalculator(street, days);
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>): void => {
     trackClarityEvent('click', { target: 'menu_open' });
@@ -38,33 +38,6 @@ export default function MainPage() {
     setAnchorEl(null);
     navigate('/street');
   };
-
-  const nextPickup = useMemo<Date | undefined>(() => {
-    if (!street || !days) {
-      return undefined;
-    }
-    const result = getNextRecyclingDay(street, days);
-
-    if (result && result.date) {
-      return new Date(result.date);
-    }
-  }, [street, days]);
-
-  const remainingDays = useMemo<number | string | undefined>(() => {
-    if (!street || !days || !nextPickup) {
-      return undefined;
-    }
-
-    const result = parseInt(getRemainingDays(nextPickup), 10);
-
-    if (result == 0) {
-      return 'Today';
-    } else if (result == 1) {
-      return 'Tomorrow';
-    } else {
-      return result;
-    }
-  }, [street, days, nextPickup, getRemainingDays]);
 
   const resultSize = useMemo<string>(() => {
     switch (remainingDays) {

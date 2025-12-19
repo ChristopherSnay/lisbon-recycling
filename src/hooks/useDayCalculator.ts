@@ -1,17 +1,27 @@
+import { useEffect, useState } from 'react';
 import type { RecyclingDay } from '../models/RecyclingDay';
 import type { Street } from '../models/Street';
+import { convertMsToDays } from '../utils/TimeUtil';
 
-export default function useDayCalculator() {
-  const getNextRecyclingDay = (street: Street, days: RecyclingDay[]): RecyclingDay => {
+export default function useDayCalculator(
+  street: Street | undefined,
+  days: RecyclingDay[] | undefined
+) {
+  const [nextPickup, setNextPickup] = useState<Date | undefined>(undefined);
+  const [remainingDays, setRemainingDays] = useState<number | string | undefined>(
+    undefined
+  );
+
+  const _getNextRecyclingDay = (street: Street, days: RecyclingDay[]): RecyclingDay => {
     return days.filter(
       (x) => x.date && street.zone === x.zone && new Date(x.date) >= new Date()
     )[0];
   };
 
-  const getRemainingDays = (nextDate: Date): string => {
-    let diffMs = nextDate.getTime() - new Date().getTime();
-
-    let diffDays = _convertMsToDays(diffMs);
+  const _getRemainingDays = (nextDate: Date): string => {
+    const nowMs = new Date().getTime();
+    const diffMs = nextDate.getTime() - nowMs;
+    const diffDays = convertMsToDays(diffMs);
 
     if (diffDays === 14) {
       return '0';
@@ -20,12 +30,40 @@ export default function useDayCalculator() {
     }
   };
 
-  const _convertMsToDays = (input: number): number => {
-    return Math.ceil(input / 1000 / 60 / 60 / 24);
-  };
+  // calculates remaining days
+  useEffect(() => {
+    if (!street || !days || !nextPickup) {
+      setRemainingDays(undefined);
+      return;
+    }
+
+    const result = parseInt(_getRemainingDays(nextPickup), 10);
+
+    if (result == 0) {
+      setRemainingDays('Today');
+    } else if (result == 1) {
+      setRemainingDays('Tomorrow');
+    } else {
+      setRemainingDays(result);
+    }
+  }, [street, days, nextPickup]);
+
+  // calculates next pickup date
+  useEffect(() => {
+    if (!street || !days) {
+      setNextPickup(undefined);
+      return;
+    }
+
+    const result = _getNextRecyclingDay(street, days);
+
+    if (result && result.date) {
+      setNextPickup(new Date(result.date));
+    }
+  }, [street, days]);
 
   return {
-    getNextRecyclingDay,
-    getRemainingDays
+    nextPickup,
+    remainingDays
   };
 }
