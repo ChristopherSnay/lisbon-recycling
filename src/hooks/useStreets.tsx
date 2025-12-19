@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Street } from '../models/Street';
 
-const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
+const baseUrl = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
 
 export default function useStreets() {
   const [streets, setStreets] = useState<Street[]>([]);
@@ -9,7 +9,7 @@ export default function useStreets() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${base}/streets.json`)
+    fetch(`${baseUrl}/streets.json`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to load streets.json');
         return res.json();

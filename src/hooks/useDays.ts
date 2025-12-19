@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { RecyclingDay } from '../models/RecyclingDay';
-export interface Day {
-  date: string;
-  zone: string;
-}
 
-const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
+const baseUrl = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
 
 export default function useDays() {
   const [days, setDays] = useState<RecyclingDay[]>([]);
@@ -13,7 +9,7 @@ export default function useDays() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${base}/days.json`)
+    fetch(`${baseUrl}/days.json`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to load days.json');
         return res.json();

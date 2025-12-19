@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from './App';
 import RequireStreetGuard from './components/RequireStreetGuard';
 import MainPage from './pages/MainPage';
@@ -23,14 +23,14 @@ export const router = createBrowserRouter([
         element: <StreetPage />
       },
       {
+        // legacy path for choosing a street - redirects to /street
         path: 'choose-street',
-        element: <StreetPage />
+        element: <Navigate to="/street" replace />
       },
       {
         path: '*',
         element: <NotFoundPage />
       }
-      // other routes...
     ]
   }
 ]);

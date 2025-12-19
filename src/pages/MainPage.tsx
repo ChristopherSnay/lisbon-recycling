@@ -25,7 +25,7 @@ export default function MainPage() {
   const { days } = useDays();
   const { getNextRecyclingDay, getRemainingDays } = useDayCalculator();
   const street = streets.find((s) => s.id === savedStreetId);
-  const open = Boolean(anchorEl);
+  const menuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>): void => {
@@ -101,7 +101,7 @@ export default function MainPage() {
             </Avatar>
           }
         />
-        <Menu anchorEl={anchorEl} open={open} onClose={() => setAnchorEl(null)}>
+        <Menu anchorEl={anchorEl} open={menuOpen} onClose={() => setAnchorEl(null)}>
           <MenuItem onClick={handleStreetChange}>Change Street</MenuItem>
         </Menu>
         <CardContent className="d-flex flex-column text-center">
